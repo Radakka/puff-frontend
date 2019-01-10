@@ -16,14 +16,16 @@ function login(username, password) {
 	.then(handleResponse)
 	.then(response => {
 		if(response.token) {
-			alert(response.token);
+			localStorage.setItem('user', username);
+			localStorage.setItem('token', response.token);
 		}
 		return response;
 	});
 }
 
 function logout() {
-	alert('logout')
+	localStorage.removeItem('user');
+	localStorage.removeItem('token');
 }
 
 function handleResponse(response) {

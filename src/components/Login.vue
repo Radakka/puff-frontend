@@ -1,8 +1,9 @@
 <template>
   <div class="login">
     <form>
-      <input v-model="username" type="text" class="user" placeholder="username" />
-      <input v-model="password" type="password" class="password" placeholder="password" />
+      <div v-if="loginFailed" class="loginError">Username or password are not correct</div>
+      <input v-model="username" v-on:keyup.enter="submit" type="text" class="user" placeholder="username" />
+      <input v-model="password" v-on:keyup.enter="submit" type="password" class="password" placeholder="password" />
       <div class="button">
         <a v-on:click="submit">Submit</a>
       </div>
@@ -12,18 +13,27 @@
 
 <script>
 import userService from '../_services/UserService';
+import router from '../router'
 
 export default {
   name: 'login',
   data: function () {
     return {
       username: '',
-      password: ''
+      password: '',
+      loginFailed: false
     }
   },
   methods: {
     submit: function () {
-      userService.login(this.username, this.password)
+      userService.login(this.username, this.password).then(
+        user => {
+          router.push('/games');
+        },
+        error => {
+          this.loginFailed = true;
+        }
+      );
     },
   }
 }
@@ -46,15 +56,27 @@ export default {
     }
     
     .button {
-        margin: 10px;
+      margin: 10px;
         
-        a {
-          background-color: #009933;
-          padding: 10px;
-          width: 90%;
-          color: #EEEEEE;
-          cursor: pointer;
-        }
+      a {
+        background-color: #009933;
+        border-radius: 5px;
+        padding: 10px 20px;
+        width: 90%;
+        color: #EEEEEE;
+        cursor: pointer;
+      }
+    }
+    
+    .loginError {
+      border: 1px solid #b30000;
+      border-radius: 5px;
+      padding: 10px;
+      width: 90%;
+      margin: 0 auto;
+      background-color: #e60000;
+      font-weight: bold;
+      color: white;
     }
   }
 </style>
