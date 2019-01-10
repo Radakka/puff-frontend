@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <h1>Your games</h1>
-    <GamesList />
+    <h1>New game</h1>
+    <NewGame />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import GamesList from '@/components/GamesList.vue'
+import NewGame from '@/components/NewGame.vue'
 
 export default {
-  name: 'games',
+  name: 'newGame',
   components: {
-    GamesList
+    NewGame
   }
 }
 </script>
