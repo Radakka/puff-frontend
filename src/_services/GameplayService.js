@@ -2,11 +2,10 @@ import config from './config'
 import userService from './UserService'
 
 export default {
-  getGames,
-  newGame
+  getGame
 };
 
-function getGames() {
+function getGame(gameId) {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -15,26 +14,7 @@ function getGames() {
     }
   };
   
-  return fetch(`${config.apiUrl}/game/list`, requestOptions)
-    .then(handleResponse)
-    .then(response => {
-      return response;
-    });
-}
-
-function newGame(username) {
-  const numberOfDecks = 1;
-  const userNames = [localStorage.getItem('user'), username];
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token')
-    },
-    body: JSON.stringify({ userNames, numberOfDecks})
-  };
-	
-  return fetch(`${config.apiUrl}/game/new`, requestOptions)
+  return fetch(`${config.apiUrl}/game/${gameId}`, requestOptions)
     .then(handleResponse)
     .then(response => {
       return response;

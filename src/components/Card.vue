@@ -1,0 +1,86 @@
+<template>
+  <div class="card" :class="cardClass">
+      <slot></slot>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'card',
+  data: function () {
+    return {
+    }
+  },
+  props: ['number', 'suit'],
+  computed: {
+    cardClass: function() {
+        return this.suit + ' n' + this.number;
+    }
+  },
+  methods: {
+  }
+}
+</script>
+
+<style scoped lang="scss">
+  .card {
+      width: 80px;
+      height: 123px;
+      background: url(../assets/baraja.png);
+      display: inline-block;    
+      vertical-align: middle;
+      line-height: 123px;
+      font-weight: bold;
+      font-size: 30px;
+      margin-right: 5px;
+
+      &.OROS {
+        background-position-y: 0px;
+      }
+      &.COPAS {
+        background-position-y: -123px;
+      }
+      &.ESPADAS {
+        background-position-y: -246px;
+      }
+      &.BASTOS {
+        background-position-y: -369px;
+      }
+      
+      &.n1 {
+        background-position-x: 0px;
+      }
+      &.n2 {
+        background-position-x: -80px;
+      }
+      &.n3 {
+        background-position-x: -160px;
+      }
+      &.n4 {
+        background-position-x: -240px;
+      }
+      &.n5 {
+        background-position-x: -320px;
+      }
+      &.n6 {
+        background-position-x: -400px;
+      }
+      &.n7 {
+        background-position-x: -480px;
+      }
+      &.n8 {
+        background-position-x: -720px;
+      }
+      &.n9 {
+        background-position-x: -800px;
+      }
+      &.n10 {
+        background-position-x: -880px;
+      }
+      &.faceDown {
+        background-position-y: 0px;
+        background-position-x: -960px;
+      }
+  }
+</style>

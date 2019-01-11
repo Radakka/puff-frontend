@@ -1,6 +1,6 @@
 <template>
   <div class="gamesList">
-    <div v-for="game in activeGames" v-on:click="openGame(game.gameId)" class="game">
+    <div v-for="game in activeGames" :key="game.gameId" v-on:click="openGame(game.gameId)" class="game">
       <span class="turn" v-if="game.isUserTurn">Your turn</span> {{game.gameId}}
     </div>
     <div class="newGame" v-on:click="newGame">
@@ -28,13 +28,14 @@ export default {
     }
   },
   created: function() {
-    gamesService.getGames().then(games => {
-      this.games = games;
-    });
+    gamesService.getGames().then(
+      games => {
+        this.games = games;
+      });
   },
   methods: {
     openGame: function(gameId) {
-      alert("open game "+gameId);
+      router.push("/game/"+gameId);
     },
     newGame: function() {
       router.push("/game/new");

@@ -25,7 +25,7 @@ function login(username, password) {
 
 function logout() {
 	localStorage.removeItem('user');
-	localStorage.removeItem('token');
+    localStorage.removeItem('token');
 }
 
 function handleResponse(response) {

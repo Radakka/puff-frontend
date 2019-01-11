@@ -9,7 +9,7 @@
         <a v-on:click="submit">Submit</a>
       </div>
     </form>
-    <router-link to="/games"><< Back to games list</router-link>
+    <router-link to="/games">&lt;&lt; Back to games list</router-link>
   </div>
 </template>
 
