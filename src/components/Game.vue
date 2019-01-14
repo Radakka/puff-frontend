@@ -1,8 +1,8 @@
 <template>
   <div v-if="gameLoaded" class="game">
-    <Oponent v-for="oponent in game.oponents" :key="oponent.username" :username="oponent.username" :handSize="oponent.hand" :faceUp="oponent.faceUp" :faceDownSize="oponent.faceDown"></Oponent>
+    <Oponent v-for="oponent in game.oponents" :key="oponent.username" :username="oponent.username" :handSize="oponent.hand" :faceUp="oponent.faceUp" :faceDownSize="oponent.faceDown" :turn="checkTurn(oponent.username)"></Oponent>
     <Table :deckSize="game.deckSize" :stackTop="stackTop" :stackSize="game.playedCards.length"/>
-    <Player :username="game.player.username" :hand="game.player.hand" :faceUp="game.player.faceUp" :faceDownSize="game.player.faceDown"></Player>
+    <Player @play-cards="playCards" :username="game.player.username" :hand="game.player.hand" :faceUp="game.player.faceUp" :faceDownSize="game.player.faceDown" :turn="checkTurn(game.player.username)"></Player>
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import Table from '@/components/Table.vue'
 import Oponent from '@/components/Oponent.vue'
 import Player from '@/components/Player.vue'
 import gameplayService from '../_services/GameplayService'
+import eventsService from '../_services/EventsService'
 
 export default {
   name: 'game',
@@ -38,7 +39,27 @@ export default {
     gameplayService.getGame(this.gameId).then(game => {
       this.game = game;
       this.gameLoaded = true;
+      this.setupEventsListener();
     });
+  },
+  methods: {
+      playCards: function(source, positions) {
+          gameplayService.playCard(this.gameId, source, positions, this.game.oponents[0].username).then(game => {
+              this.game = game;
+          });
+      },
+      setupEventsListener: function() {
+        let _this = this;
+        eventsService.setupEventsListener(this.gameId, game => {
+          _this.game = game;
+        },
+        error => {
+          this.setupEventsListener();
+        });
+      },
+      checkTurn: function(username) {
+          return username === this.game.currentTurn;
+      }
   }
 }
 </script>

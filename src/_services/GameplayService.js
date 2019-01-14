@@ -22,14 +22,14 @@ function getGame(gameId) {
   });
 }
 
-function playCard(gameId, cardSource, cardPositions, targetPlayer) {
+function playCard(gameId, cardSource, cardPosition, targetPlayer) {
   const requestOptions = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     },
-    body: JSON.stringify({cardSource, cardPositions, targetPlayer})
+    body: JSON.stringify({cardSource, cardPosition, targetPlayer})
   };
 
   return fetch(`${config.apiUrl}/game/${gameId}/play`, requestOptions)

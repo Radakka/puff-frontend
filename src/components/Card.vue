@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :class="cardClass" v-on:click="cardClick">
+  <div class="card" :class="cardClass" @click="cardClick">
       <slot></slot>
   </div>
 </template>
@@ -8,28 +8,22 @@
 
 export default {
   name: 'card',
-  data: function () {
-    return {
-      selected: false
-    }
-  },
-  props: ['card', 'faceDown'],
+  props: ['card', 'faceDown', 'position', 'source'],
   computed: {
     cardClass: function() {
         if(!this.card || this.faceDown) {
             return 'faceDown'
         }
         let cardClass = this.card.suit + ' n' + this.card.number;
-        cardClass = this.card.playable ? cardClass + ' playable' : cardClass;
-        cardClass = this.selected ? cardClass + ' selected' : cardClass;
+        cardClass = this.card.playable && !this.card.unselectable ? cardClass + ' playable' : cardClass;
+        cardClass = this.card.selected ? cardClass + ' selected' : cardClass;
         return cardClass;
     }
   },
   methods: {
     cardClick: function() {
-      if(this.card && this.card.playable) {
-        this.selected = !this.selected;
-        $emit('cardClick', this.card.position);
+      if(this.card && this.card.playable && !this.card.unselectable) {
+        this.$emit('card-click', this.source, this.position, this.selected);
       }
     }
   }
@@ -65,7 +59,7 @@ export default {
       line-height: 123px;
       font-weight: bold;
       font-size: 30px;
-      margin-right: 5px;
+      margin-right: 10px;
 
       &.OROS {
         background-position-y: 0px;

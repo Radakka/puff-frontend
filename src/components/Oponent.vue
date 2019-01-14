@@ -1,5 +1,6 @@
 <template>
   <div class="oponent">
+      <div class="turn" v-if="turn">Current turn</div>
       <div class="username">{{username}}</div>
       <div class="hand">
           <Card faceDown="true">{{handSize}}</Card>
@@ -31,7 +32,7 @@ export default {
     return {
     }
   },
-  props: ['username', 'handSize', 'faceUp', 'faceDownSize']
+  props: ['username', 'handSize', 'faceUp', 'faceDownSize', 'turn']
 }
 </script>
 
@@ -45,10 +46,16 @@ export default {
     border-radius: 10px;
     background-color: #b3b300;
 
+    .turn {
+      display: inline-block;
+      margin-right:5px;
+    }
+
     .username {
       font-weight: bold;
       font-size: 20px;
       margin-bottom: 10px;
+      display: inline-block;
     }
   
     .hand {

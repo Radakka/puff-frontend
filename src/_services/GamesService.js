@@ -42,10 +42,13 @@ function newGame(username) {
 }
 
 function handleResponse(response) {
+    console.log("handleResponse games");
   return response.text().then(text => {
     const data = text && JSON.parse(text);
+    console.log('data: '+data)
     if(!response.ok) {
       if(response.status === 401) {
+          console.log('status 401')
         userService.logout();
         location.reload(true);
       }
