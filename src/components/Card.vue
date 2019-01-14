@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :class="cardClass">
+  <div class="card" :class="cardClass" v-on:click="cardClick">
       <slot></slot>
   </div>
 </template>
@@ -10,20 +10,52 @@ export default {
   name: 'card',
   data: function () {
     return {
+      selected: false
     }
   },
-  props: ['number', 'suit'],
+  props: ['card', 'faceDown'],
   computed: {
     cardClass: function() {
-        return this.suit + ' n' + this.number;
+        if(!this.card || this.faceDown) {
+            return 'faceDown'
+        }
+        let cardClass = this.card.suit + ' n' + this.card.number;
+        cardClass = this.card.playable ? cardClass + ' playable' : cardClass;
+        cardClass = this.selected ? cardClass + ' selected' : cardClass;
+        return cardClass;
     }
   },
   methods: {
+    cardClick: function() {
+      if(this.card && this.card.playable) {
+        this.selected = !this.selected;
+        $emit('cardClick', this.card.position);
+      }
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+  .player {
+      .card {
+          opacity: 0.5;
+
+          &.playable {
+              opacity: 1.0;
+              cursor: pointer;
+
+              &:hover {
+                  transform: scale(1.1);
+              }  
+          }
+
+          &.selected {
+              transform: scale(1.1);
+          }
+      }
+  }
+
   .card {
       width: 80px;
       height: 123px;

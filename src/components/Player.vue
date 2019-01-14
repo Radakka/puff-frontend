@@ -2,10 +2,10 @@
   <div class="player">
       <div class="username">{{username}}</div>
       <div class="hand">
-          <Card v-for="card in hand" :suit="card.suit" :number="card.number"></Card>
+          <Card v-for="card in hand" :card="card"></Card>
       </div>
       <div class="table">
-          <Card v-for="card in tableCards" :suit="card.suit" :number="card.number"></Card>
+          <Card v-for="card in tableCards" :card="card"></Card>
       </div>
   </div>
 </template>
@@ -41,12 +41,14 @@ export default {
     width: fit-content;
     margin: 0 auto;
     margin-bottom: 30px;
-    padding: 5px 15px;
-    border-radius: 5px;
-    background-color: #EEE;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #b3b300;
 
     .username {
       font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 10px;
     }
   
     .hand {

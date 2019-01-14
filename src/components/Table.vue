@@ -1,7 +1,7 @@
 <template>
   <div class="gameTable">
-      <Card suit="faceDown" number="0">{{deckSize}}</Card>
-      <Card v-if="stackTop" :suit="stackTop.suit" :number="stackTop.number">{{stackSize}}</Card>
+      <Card faceDown="true">{{deckSize}}</Card>
+      <Card v-if="stackTop" :card="stackTop">{{stackSize}}</Card>
   </div>
 </template>
 

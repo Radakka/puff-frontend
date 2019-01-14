@@ -2,7 +2,8 @@ import config from './config'
 import userService from './UserService'
 
 export default {
-  getGame
+  getGame,
+  playCard
 };
 
 function getGame(gameId) {
@@ -18,7 +19,24 @@ function getGame(gameId) {
     .then(handleResponse)
     .then(response => {
       return response;
-    });
+  });
+}
+
+function playCard(gameId, cardSource, cardPositions, targetPlayer) {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify({cardSource, cardPositions, targetPlayer})
+  };
+
+  return fetch(`${config.apiUrl}/game/${gameId}/play`, requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response;
+  });
 }
 
 function handleResponse(response) {
