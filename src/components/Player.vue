@@ -48,7 +48,7 @@ export default {
       },
       tableCards: function () {
           const tableDraw = this.tableDraw;
-          let tableCards = this.faceUp.slice();
+          let tableCards = JSON.parse(JSON.stringify(this.faceUp));
             for(var i = 0; i < tableCards.length;i++) {
                 if(tableDraw) {
                     tableCards[i].playable = true;
@@ -107,6 +107,9 @@ export default {
   },
   methods: {
     cardClick(source, position) {
+        if(!this.turn) {
+            return;
+        }
         this.source = source;
         let cardSource = this.hand;
 
@@ -146,23 +149,25 @@ export default {
         }
     },
     playCards() {
-        let cardSource = this.hand;
+        if(this.cardSelected) {
+            let cardSource = this.hand;
 
-        if(this.source === 'FACE_UP') {
-            cardSource = this.faceUp;
-        } else if (this.source === 'FACE_DOWN') {
-            cardSource = this.faceDown;
+            if(this.source === 'FACE_UP') {
+                cardSource = this.faceUp;
+            } else if (this.source === 'FACE_DOWN') {
+                cardSource = this.faceDown;
+            }
+
+            let cardsPositions = [];
+
+            for(var i = 0; i < cardSource.length;i++) {
+                if(cardSource[i].selected) {
+                    cardsPositions.push(i);
+                };
+            }
+
+            this.$emit("play-cards", this.source, cardsPositions);
         }
-
-        let cardsPositions = [];
-
-        for(var i = 0; i < cardSource.length;i++) {
-            if(cardSource[i].selected) {
-                cardsPositions.push(i);
-            };
-        }
-
-        this.$emit("play-cards", this.source, cardsPositions);
     }
   }
 }

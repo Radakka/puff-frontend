@@ -32,15 +32,19 @@ export default {
   data: function() {
       return {
           game: {},
-          gameLoaded: false
+          gameLoaded: false,
+          eventsSource: null
       }
   },
   created: function() {
     gameplayService.getGame(this.gameId).then(game => {
       this.game = game;
       this.gameLoaded = true;
-      this.setupEventsListener();
+      this.eventsSource = this.setupEventsListener();
     });
+  },
+  destroyed: function() {
+      this.eventsSource.close();
   },
   methods: {
       playCards: function(source, positions) {
@@ -50,11 +54,13 @@ export default {
       },
       setupEventsListener: function() {
         let _this = this;
-        eventsService.setupEventsListener(this.gameId, game => {
+        return eventsService.setupEventsListener(this.gameId, game => {
           _this.game = game;
         },
         error => {
-          this.setupEventsListener();
+          console.log(error);
+          _this.eventsSource.close();
+          _this.eventsSource = _this.setupEventsListener();
         });
       },
       checkTurn: function(username) {
