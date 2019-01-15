@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .player {
+  .player.turn {
       .card {
           opacity: 0.5;
 

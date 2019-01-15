@@ -1,7 +1,13 @@
 <template>
-  <div class="player">
+  <div class="player" :class="{turn: turn}">
       <div class="turn" v-if="turn">Your turn</div>
-      <div class="username">{{username}} <div class="button" :class="{ active: cardSelected}"><a @click="playCards">PLAY</a></div></div>
+      <div class="username">
+          {{username}} 
+          <div class="button" :class="{ active: cardSelected}">
+              <a v-if="tableDraw" @click="playCards">DRAW</a>
+              <a v-else @click="playCards">PLAY</a>
+          </div>
+        </div>
       <div class="hand">
           <Card v-for="(card, index) in hand" :card="card" source="HAND" :position="index" @card-click="cardClick"></Card>
       </div>
@@ -19,6 +25,7 @@ export default {
   components: {
       Card
   },
+  props: ['username', 'hand', 'faceUp', 'faceDownSize', 'turn'],
   data: function() {
       return  {
           source: "HAND",
@@ -26,8 +33,28 @@ export default {
       }
   },
   computed: {
+      tableDraw: function () {
+          if (this.hand && this.hand.length > 0) {
+              return false;
+          }
+
+          if(this.faceUp.length === 0 && this.hand.length === 0) {
+              return false;
+          }
+
+          return this.faceUp.filter(card => {
+              return card.playable;
+          }).length == 0;
+      },
       tableCards: function () {
+          const tableDraw = this.tableDraw;
           let tableCards = this.faceUp.slice();
+            for(var i = 0; i < tableCards.length;i++) {
+                if(tableDraw) {
+                    tableCards[i].playable = true;
+                }
+                tableCards[i].source = "FACE_UP";
+            }
           for(var j = tableCards.length;j < this.faceDown.length;j++) {
             tableCards.push(this.faceDown[j]);
           }
@@ -42,17 +69,40 @@ export default {
             return !!card.selected;
         }).length > 0;
 
-        return handSelected || faceUpSelected;
+        const faceDownSelected = this.faceDown.filter(card => {
+            return !!card.selected;
+        }).length > 0;
+
+        return handSelected || faceUpSelected || faceDownSelected;
       }
   },
-  created: function() {
-    const faceDownPlayable = this.faceUp.length === 0;
+  watch: {
+      faceDownSize: function () {
+          this.faceDown = [];
+          const faceDownPlayable = this.faceUp.length === 0 && this.hand.length === 0;
+          for(var i = 0;i < this.faceDownSize;i++) {
+            this.faceDown.push({suit: "faceDown", number: 0, source: "FACE_DOWN", playable: faceDownPlayable});
+          }
+      },
+      hand: function () {
+          this.faceDown = [];
+          const faceDownPlayable = this.faceUp.length === 0 && this.hand.length === 0;
+          for(var i = 0;i < this.faceDownSize;i++) {
+            this.faceDown.push({suit: "faceDown", number: 0, source: "FACE_DOWN", playable: faceDownPlayable});
+          }
+      },
+      faceUp: function () {
+          this.faceDown = [];
+          const faceDownPlayable = this.faceUp.length === 0 && this.hand.length === 0;
+          for(var i = 0;i < this.faceDownSize;i++) {
+            this.faceDown.push({suit: "faceDown", number: 0, source: "FACE_DOWN", playable: faceDownPlayable});
+          }
+      }
+  },
+  created: function () {
+    const faceDownPlayable = this.faceUp.length === 0 && this.hand.length === 0;
     for(var i = 0;i < this.faceDownSize;i++) {
         this.faceDown.push({suit: "faceDown", number: 0, source: "FACE_DOWN", playable: faceDownPlayable});
-    }
-
-    for(var j = 0;j < this.faceUp.length;j++) {
-        this.faceUp[j].source = "FACE_UP";
     }
   },
   methods: {
@@ -62,6 +112,10 @@ export default {
 
         if(source === 'FACE_UP') {
             cardSource = this.faceUp;
+        }
+
+        if(source === 'FACE_DOWN') {
+            cardSource = this.faceDown;
         }
 
         if(source === 'HAND' || source === 'FACE_UP') {
@@ -75,6 +129,17 @@ export default {
             if(selected && cardSource[i].number != card.number) {
               this.$set(cardSource[i], 'unselectable', true);
             } else if(!selected && !anySelected) {
+              this.$set(cardSource[i], 'unselectable', false);
+            }
+          }
+        } else {
+          let card = cardSource[position];
+          let selected = !card.selected;
+          this.$set(card, 'selected', selected);
+          for(var i = 0; i < cardSource.length;i++) {
+            if(selected && i !== position) {
+              this.$set(cardSource[i], 'unselectable', true);
+            } else {
               this.$set(cardSource[i], 'unselectable', false);
             }
           }
@@ -99,8 +164,7 @@ export default {
 
         this.$emit("play-cards", this.source, cardsPositions);
     }
-  },
-  props: ['username', 'hand', 'faceUp', 'faceDownSize', 'turn']
+  }
 }
 </script>
 
