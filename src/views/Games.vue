@@ -7,7 +7,7 @@
 
 <script>
 // @ is an alias to /src
-import GamesList from '@/components/GamesList.vue'
+import GamesList from '../components/GamesList.vue'
 
 export default {
   name: 'games',

@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import Table from '@/components/Table.vue'
-import Oponent from '@/components/Oponent.vue'
-import Player from '@/components/Player.vue'
+import Table from '../components/Table.vue'
+import Oponent from '../components/Oponent.vue'
+import Player from '../components/Player.vue'
 import gameplayService from '../_services/GameplayService'
 import eventsService from '../_services/EventsService'
 
