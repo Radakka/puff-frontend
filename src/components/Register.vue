@@ -42,7 +42,6 @@ export default {
             );
           },
           error => {
-            console.log(error);
             this.error = true;
             this.errorMessage = error;
           }

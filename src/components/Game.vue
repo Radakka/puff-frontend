@@ -58,7 +58,6 @@ export default {
           _this.game = game;
         },
         error => {
-          console.log(error);
           _this.eventsSource.close();
           _this.eventsSource = _this.setupEventsListener();
         });

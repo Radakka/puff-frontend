@@ -30,7 +30,6 @@ export default {
     submit: function() {
       gamesService.newGame(this.oponent).then(
         game => {
-          console.log(game);
           router.push('/games');
         },
         error => {
