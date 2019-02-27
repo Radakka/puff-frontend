@@ -2,7 +2,8 @@ import config from './config'
 
 export default {
 	login,
-	logout
+	logout,
+	register
 };
 
 function login(username, password) {
@@ -23,6 +24,20 @@ function login(username, password) {
 	});
 }
 
+function register(username, password) {
+	const requestOptions = {
+		method: 'POST',
+		headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify({ username, password})
+	};
+	
+	return fetch(`${config.apiUrl}/register`, requestOptions)
+	.then(handleResponse)
+	.then(response => {
+		return response;
+	});
+}
+
 function logout() {
 	localStorage.removeItem('user');
     localStorage.removeItem('token');
@@ -30,9 +45,10 @@ function logout() {
 
 function handleResponse(response) {
 	return response.text().then(text => {
-		const data = text && JSON.parse(text);
+		let data = text;
+		try { data = JSON.parse(text) } catch {}
 		if(!response.ok) {
-			const error = (data && data.message) || response.statusText;
+			const error = (data.message ? data.message : data) || response.statusText;
 			return Promise.reject(error);
 		}
 		

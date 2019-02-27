@@ -5,7 +5,10 @@
       <input v-model="username" v-on:keyup.enter="submit" type="text" class="user" placeholder="username" />
       <input v-model="password" v-on:keyup.enter="submit" type="password" class="password" placeholder="password" />
       <div class="button">
-        <a v-on:click="submit">Submit</a>
+        <a v-on:click="submit">Login</a>
+      </div>
+      <div class="button register">
+        <router-link to="/register">Register</router-link>
       </div>
     </form>
   </div>
@@ -34,7 +37,7 @@ export default {
           this.loginFailed = true;
         }
       );
-    },
+    }
   }
 }
 </script>
@@ -57,6 +60,7 @@ export default {
     
     .button {
       margin: 10px;
+      display: inline-block;
         
       a {
         background-color: #009933;
@@ -65,6 +69,11 @@ export default {
         width: 90%;
         color: #EEEEEE;
         cursor: pointer;
+        text-decoration: none;
+      }
+      
+      &.register a {
+      	background-color: #777;
       }
     }
     
